@@ -3,7 +3,6 @@
     "tabWidth": 4,
     "quoteProps": "as-needed",
     "trailingComma": "es5",
-    "jsxBracketSameLine": false,
     "proseWrap": "preserve",
     "htmlWhitespaceSensitivity": "css",
     "endOfLine": "lf",
