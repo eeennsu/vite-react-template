@@ -1,6 +1,8 @@
-import { type FC } from 'react'
-import { Outlet } from 'react-router-dom'
+import { type FC } from 'react';
+import { Outlet } from 'react-router-dom';
 
-export const AppLayout: FC = () => {
-    return <Outlet />
-}
+const AppLayout: FC = () => {
+  return <Outlet />;
+};
+
+export default AppLayout;

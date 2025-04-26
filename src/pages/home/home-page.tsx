@@ -1,5 +1,7 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
-export const HomePage: FC = () => {
-    return <main></main>
-}
+const HomePage: FC = () => {
+  return <main></main>;
+};
+
+export default HomePage;
