@@ -42,3 +42,5 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:dev-${{ github.sha }}, ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+        env:
+          IMAGE_VERSION: $(date + '%Y%d%m-%H%M%S')-${{ github.sha }}
