@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    port: 3000,
+    port: 7173,
     host: true,
     proxy: {
       '/api': {
@@ -14,6 +14,10 @@ export default defineConfig({
         rewrite: path => path.replace(/^\/api/, ''),
       },
     },
+  },
+  preview: {
+    port: 7173,
+    host: true,
   },
   resolve: {
     alias: {

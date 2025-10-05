@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  vite-react-template:
+    image: 634497641520.dkr.ecr.ap-northeast-2.amazonaws.com/vite-react-template:latest
+    container_name: vite-react-template-web
+    ports:
+      - 7173:7173
+    volumes:
+      - .:/app
+    stdin_open: true
+    env_file:
+      - .env
+    tty: true
+    restart: 'always'
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:7173']
+      interval: 30s
+      timeout: 3s
+      retries: 3

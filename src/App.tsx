@@ -1,5 +1,5 @@
-import '@/lib/css/globals.css';
 import ErrorPage from '@/pages/error/error-page';
+import '@/shared/libs/globals.css';
 import BrowserRouterProvider from '@/shared/utils/BrowserRouterProvider';
 import TanstackQueryProvider from '@/shared/utils/TanstackQueryProvider';
 import { FC } from 'react';
