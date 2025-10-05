@@ -62,7 +62,7 @@ export default function LandingSeonwooAI() {
             </span>
           </h1>
           <p className='mt-5 max-w-2xl text-lg leading-relaxed text-zinc-300 md:text-xl'>
-            무대 연출, 팬콘 기획, VCR 아이디어, Next.js/CI·CD까지. 선우서윤의 작업 흐름과 어휘, 자료
+            무대 연출, 팬콘 기획, VCR 아이디어, 창의적인 아이디어. 선우서윤의 작업 흐름과 어휘, 자료
             구조를 학습한 전용 AI를 3단계로 빠르게 제작·배포합니다.
           </p>
           <div className='mt-7 flex flex-wrap items-center gap-3'>
