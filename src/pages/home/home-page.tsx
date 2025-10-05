@@ -9,9 +9,8 @@ const HomePage: FC = () => {
 
   return (
     <div className='font-sans text-gray-800'>
-      {/* Hero Section */}
       <section className='flex h-screen flex-col items-center justify-center bg-blue-600 text-white'>
-        <h1 className='mb-4 text-5xl font-bold'>Welcome to Our Product</h1>
+        <h1 className='mb-4 text-5xl font-bold'>Welcome to Our Product! Hello!</h1>
         <p className='mb-8 max-w-xl text-center text-xl'>
           This is a simple React landing page built with Tailwind CSS.
         </p>
@@ -20,7 +19,6 @@ const HomePage: FC = () => {
         </button>
       </section>
 
-      {/* Features Section */}
       <section className='bg-gray-100 py-20'>
         <h2 className='mb-12 text-center text-4xl font-bold'>Features</h2>
         <div className='flex flex-wrap justify-center gap-8'>
@@ -33,7 +31,6 @@ const HomePage: FC = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className='bg-gray-800 py-6 text-center text-white'>
         <p>&copy; 2025 My Company. All rights reserved.</p>
       </footer>
