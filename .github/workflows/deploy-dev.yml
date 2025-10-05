@@ -15,7 +15,7 @@ jobs:
     # 2. 변수 설정
     env:
       AWS_REGION: ap-northeast-2
-      ECR_REPOSITORY: my-next-app-repo
+      ECR_REPOSITORY: vite-react-template
 
     steps:
       # 3. 소스 코드 체크아웃
