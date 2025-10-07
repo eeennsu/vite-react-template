@@ -48,10 +48,10 @@ jobs:
               --arg author "$COMMIT_AUTHOR" \
               '{object_type:"text",
                 text:("🚀 DEV 배포 시작"
-                      + "\nrepo: "   + $repo
-                      + "\nbranch: " + $branch
-                      + "\ncommit: " + $commit
-                      + "\nauthor: " + $author),
+                      + "\n레포지토리: "   + $repo
+                      + "\n브랜치: " + $branch
+                      + "\n커밋: " + $commit
+                      + "\n작성자: " + $author),
                 link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'",
                       mobile_web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"},
                 button_title:"자세히"}'
@@ -99,11 +99,11 @@ jobs:
               --arg run  "$GITHUB_RUN_NUMBER" \
               '{object_type:"text",
                 text:("✅ DEV 배포 성공"
-                      + "\nrepo: "   + $repo
-                      + "\nbranch: " + $branch
-                      + "\ncommit: " + $commit
-                      + "\nauthor: " + $author
-                      + "\nimage: "  + $img
+                      + "\n레포지토리: "   + $repo
+                      + "\n브랜치: " + $branch
+                      + "\n커밋: " + $commit
+                      + "\n작성자: " + $author
+                      + "\n이미지: "  + $img
                       + "\nrun: "    + $run),
                 link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'",
                       mobile_web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"},
@@ -135,10 +135,10 @@ jobs:
               --arg author "$COMMIT_AUTHOR" \
               '{object_type:"text",
                 text:("❌ DEV 배포 실패"
-                      + "\nrepo: "   + $repo
-                      + "\nbranch: " + $branch
-                      + "\ncommit: " + $commit
-                      + "\nauthor: " + $author),
+                      + "\n레포지토리: "   + $repo
+                      + "\n브랜치: " + $branch
+                      + "\n커밋: " + $commit
+                      + "\n작성자: " + $author),
                 link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'",
                       mobile_web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"},
                 button_title:"에러 로그"}'
