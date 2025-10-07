@@ -23,7 +23,7 @@ jobs:
       # ✅ 1. 배포 시작 알림
       # =========================================================
       - name: Send KakaoTalk message on start
-        uses: jun-choi/action-kakao-message@v1
+        uses: tech-jun/action-kakao-message@v1
         with:
           bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
           refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
       # =========================================================
       - name: Send KakaoTalk message on success
         if: success()
-        uses: jun-choi/action-kakao-message@v1
+        uses: tech-jun/action-kakao-message@v1
         with:
           bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
           refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
@@ -76,7 +76,7 @@ jobs:
       # =========================================================
       - name: Send KakaoTalk message on failure
         if: failure()
-        uses: jun-choi/action-kakao-message@v1
+        uses: tech-jun/action-kakao-message@v1
         with:
           bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
           refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
