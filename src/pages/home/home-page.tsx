@@ -9,6 +9,12 @@ export default function HomePage() {
     <div className='text-4xl text-purple-600 italic'>
       Hello Home Page
       <p className='text-2xl text-yellow-600 italic'>Now Updated New Feature 🎉</p>
+      <ul>
+        <li>선우서윤 전용 AI — 연출/콘서트/제품개발까지 한 번에</li>
+        <li>맞춤 프롬프트 템플릿</li>
+        <li>개인화 메모리</li>
+        <li>문서/이미지 참조</li>
+      </ul>
     </div>
     // <div className='min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black text-zinc-100'>
     //   {/* Nav */}
