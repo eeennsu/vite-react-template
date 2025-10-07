@@ -26,15 +26,12 @@ jobs:
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
-          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }} # 없으면 비워둬도 됨
         run: |
-          TOKEN_REQ="grant_type=refresh_token&client_id=${KAKAO_REST_API_KEY}&refresh_token=${KAKAO_REFRESH_TOKEN}"
-          if [ -n "${KAKAO_CLIENT_SECRET}" ]; then
-            TOKEN_REQ="${TOKEN_REQ}&client_secret=${KAKAO_CLIENT_SECRET}"
-          fi
           ACCESS_TOKEN=$(curl -s -X POST https://kauth.kakao.com/oauth/token \
             -H "Content-Type: application/x-www-form-urlencoded" \
-            -d "${TOKEN_REQ}" | jq -r '.access_token')
+            -d "grant_type=refresh_token&client_id=${KAKAO_REST_API_KEY}&refresh_token=${KAKAO_REFRESH_TOKEN}" \
+            | jq -r '.access_token')
+
           if [ -z "${ACCESS_TOKEN}" ] || [ "${ACCESS_TOKEN}" = "null" ]; then
             echo "Failed to get Kakao access token"; exit 1
           fi
@@ -80,6 +77,7 @@ jobs:
           MSG_DESC="image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:dev-${GITHUB_SHA::7}\nrun: ${GITHUB_RUN_NUMBER}"
           TEMPLATE=$(jq -nc --arg t "$MSG_TITLE" --arg d "$MSG_DESC" \
             '{object_type:"text", text:($t+"\n"+$d), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'", mobile_web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"로그 보기"}')
+
           curl -s -X POST "https://kapi.kakao.com/v2/api/talk/memo/default/send" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
             --data-urlencode "template_object=${TEMPLATE}" >/dev/null
@@ -90,20 +88,17 @@ jobs:
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
-          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
         run: |
-          TOKEN_REQ="grant_type=refresh_token&client_id=${KAKAO_REST_API_KEY}&refresh_token=${KAKAO_REFRESH_TOKEN}"
-          if [ -n "${KAKAO_CLIENT_SECRET}" ]; then
-            TOKEN_REQ="${TOKEN_REQ}&client_secret=${KAKAO_CLIENT_SECRET}"
-          fi
           ACCESS_TOKEN=$(curl -s -X POST https://kauth.kakao.com/oauth/token \
             -H "Content-Type: application/x-www-form-urlencoded" \
-            -d "${TOKEN_REQ}" | jq -r '.access_token')
+            -d "grant_type=refresh_token&client_id=${KAKAO_REST_API_KEY}&refresh_token=${KAKAO_REFRESH_TOKEN}" \
+            | jq -r '.access_token')
 
           MSG_TITLE="❌ DEV 배포 실패"
           MSG_DESC="repo: ${GITHUB_REPOSITORY}\nbranch: ${GITHUB_REF_NAME}\ncommit: ${GITHUB_SHA::7}"
           TEMPLATE=$(jq -nc --arg t "$MSG_TITLE" --arg d "$MSG_DESC" \
             '{object_type:"text", text:($t+"\n"+$d), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'", mobile_web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"에러 로그"}')
+
           curl -s -X POST "https://kapi.kakao.com/v2/api/talk/memo/default/send" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
             --data-urlencode "template_object=${TEMPLATE}" >/dev/null
