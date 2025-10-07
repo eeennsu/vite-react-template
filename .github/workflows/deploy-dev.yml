@@ -1,5 +1,6 @@
 name: Build and Push to ECR on dev push
 
+# dev 브랜치에 push 이벤트가 발생했을 때 실행되도록 수정
 on:
   push:
     branches:
@@ -20,20 +21,32 @@ jobs:
         uses: actions/checkout@v4
 
       # =========================================================
-      # ✅ 1. 배포 시작 알림
+      # 1. 배포 시작 알림
       # =========================================================
+      - name: Get Access Token for Start Notification
+        id: get_token_start
+        run: |
+          response=$(curl -s -X POST "https://kauth.kakao.com/oauth/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=refresh_token" \
+            -d "client_id=${{ secrets.KAKAO_REST_API_KEY }}" \
+            -d "refresh_token=${{ secrets.KAKAO_REFRESH_TOKEN }}")
+          echo "access_token=$(echo $response | jq -r .access_token)" >> $GITHUB_OUTPUT
+
       - name: Send KakaoTalk message on start
-        uses: tech-jun/action-kakao-message@v1
+        uses: StyleShare/action-kakao-talk@v1
         with:
-          bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
-          refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
-          text: |
-            🚀 [${{ env.ECR_REPOSITORY }}] 배포 시작
-            - Branch: ${{ github.ref_name }}
-            - Commit: ${{ github.sha }}
-            - Written by: ${{ github.actor }}
-          button-text: '커밋 내역 확인하기'
-          button-url: '${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}'
+          token: ${{ steps.get_token_start.outputs.access_token }}
+          template: |
+            {
+              "object_type": "text",
+              "text": "🚀 [${{ env.ECR_REPOSITORY }}] 배포 시작\n- Branch: ${{ github.ref_name }}\n- Commit: ${{ github.sha }}",
+              "link": {
+                "web_url": "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}",
+                "mobile_web_url": "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+              },
+              "button_title": "커밋 내역 확인하기"
+            }
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -47,7 +60,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push Docker image
-        id: build-image # step에 id를 부여하여 결과 접근
+        id: build-image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -57,32 +70,61 @@ jobs:
           IMAGE_VERSION: $(date +'%Y%d%m-%H%M%S')-${{ github.sha }}
 
       # =========================================================
-      # ✅ 2. 배포 성공 알림 (모든 스텝이 성공했을 때만 실행)
+      # 2. 배포 성공 알림
       # =========================================================
+      - name: Get Access Token for Success Notification
+        if: success()
+        id: get_token_success
+        run: |
+          response=$(curl -s -X POST "https://kauth.kakao.com/oauth/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=refresh_token" \
+            -d "client_id=${{ secrets.KAKAO_REST_API_KEY }}" \
+            -d "refresh_token=${{ secrets.KAKAO_REFRESH_TOKEN }}")
+          echo "access_token=$(echo $response | jq -r .access_token)" >> $GITHUB_OUTPUT
+
       - name: Send KakaoTalk message on success
         if: success()
-        uses: tech-jun/action-kakao-message@v1
+        uses: StyleShare/action-kakao-talk@v1
         with:
-          bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
-          refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
-          text: |
-            ✅ [${{ env.ECR_REPOSITORY }}] 배포 성공
-            - Image Digest: ${{ steps.build-image.outputs.digest }}
-          button-text: 'Actions 로그 보기'
-          button-url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          token: ${{ steps.get_token_success.outputs.access_token }}
+          template: |
+            {
+              "object_type": "text",
+              "text": "✅ [${{ env.ECR_REPOSITORY }}] 배포 성공!\n- Image Digest: ${{ steps.build-image.outputs.digest }}",
+              "link": {
+                "web_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                "mobile_web_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              },
+              "button_title": "Actions 로그 보기"
+            }
 
       # =========================================================
-      # ✅ 3. 배포 실패 알림 (하나라도 스텝이 실패했을 때 실행)
+      # 3. 배포 실패 알림
       # =========================================================
+      - name: Get Access Token for Failure Notification
+        if: failure()
+        id: get_token_failure
+        run: |
+          response=$(curl -s -X POST "https://kauth.kakao.com/oauth/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=refresh_token" \
+            -d "client_id=${{ secrets.KAKAO_REST_API_KEY }}" \
+            -d "refresh_token=${{ secrets.KAKAO_REFRESH_TOKEN }}")
+          echo "access_token=$(echo $response | jq -r .access_token)" >> $GITHUB_OUTPUT
+
       - name: Send KakaoTalk message on failure
         if: failure()
-        uses: tech-jun/action-kakao-message@v1
+        uses: StyleShare/action-kakao-talk@v1
         with:
-          bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
-          refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
-          text: |
-            ❌ [${{ env.ECR_REPOSITORY }}] 배포 실패
-            - Branch: ${{ github.ref_name }}
-            - 확인이 필요합니다.
-          button-text: 'Actions 로그 보기'
-          button-url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          token: ${{ steps.get_token_failure.outputs.access_token }}
+          template: |
+            {
+              "object_type": "text",
+              "text": "❌ [${{ env.ECR_REPOSITORY }}] 배포 실패...\n- Branch: ${{ github.ref_name }}\n- 확인이 필요합니다.",
+              "link": {
+                "web_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                "mobile_web_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              },
+              "button_title": "Actions 로그 보기"
+            }
