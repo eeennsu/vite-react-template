@@ -1,6 +1,5 @@
 name: Build and Push to ECR on dev push
 
-# 1. 워크플로우 실행 조건 (push 이벤트로 변경)
 on:
   push:
     branches:
@@ -12,17 +11,30 @@ jobs:
     permissions:
       contents: read
 
-    # 2. 변수 설정
     env:
       AWS_REGION: ap-northeast-2
       ECR_REPOSITORY: vite-react-template
 
     steps:
-      # 3. 소스 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 4. AWS 자격 증명 설정
+      # =========================================================
+      # ✅ 1. 배포 시작 알림
+      # =========================================================
+      - name: Send KakaoTalk message on start
+        uses: jun-choi/action-kakao-message@v1
+        with:
+          bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
+          refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+          text: |
+            🚀 [${{ env.ECR_REPOSITORY }}] 배포 시작
+            - Branch: ${{ github.ref_name }}
+            - Commit: ${{ github.sha }}
+            - Written by: ${{ github.actor }}
+          button-text: '커밋 내역 확인하기'
+          button-url: '${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}'
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -30,17 +42,47 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # 5. Amazon ECR 로그인
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 6. Docker 이미지 빌드 및 푸시
       - name: Build and push Docker image
+        id: build-image # step에 id를 부여하여 결과 접근
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:dev-${{ github.sha }}, ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
         env:
-          IMAGE_VERSION: $(date + '%Y%d%m-%H%M%S')-${{ github.sha }}
+          IMAGE_VERSION: $(date +'%Y%d%m-%H%M%S')-${{ github.sha }}
+
+      # =========================================================
+      # ✅ 2. 배포 성공 알림 (모든 스텝이 성공했을 때만 실행)
+      # =========================================================
+      - name: Send KakaoTalk message on success
+        if: success()
+        uses: jun-choi/action-kakao-message@v1
+        with:
+          bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
+          refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+          text: |
+            ✅ [${{ env.ECR_REPOSITORY }}] 배포 성공
+            - Image Digest: ${{ steps.build-image.outputs.digest }}
+          button-text: 'Actions 로그 보기'
+          button-url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+
+      # =========================================================
+      # ✅ 3. 배포 실패 알림 (하나라도 스텝이 실패했을 때 실행)
+      # =========================================================
+      - name: Send KakaoTalk message on failure
+        if: failure()
+        uses: jun-choi/action-kakao-message@v1
+        with:
+          bot-token: ${{ secrets.KAKAO_REST_API_KEY }}
+          refresh-token: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+          text: |
+            ❌ [${{ env.ECR_REPOSITORY }}] 배포 실패
+            - Branch: ${{ github.ref_name }}
+            - 확인이 필요합니다.
+          button-text: 'Actions 로그 보기'
+          button-url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
