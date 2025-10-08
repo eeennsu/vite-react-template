@@ -6,10 +6,7 @@ import React from 'react';
 
 export default function HomePage() {
   return (
-    <div className='text-4xl text-purple-600 italic'>
-      Hello World!
-      <p className='text-sm font-extrabold'>Test Text</p>
-    </div>
+    <div className='bg-orange-400 text-5xl text-black'>Hello world!</div>
     // <div className='min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black text-zinc-100'>
     //   {/* Nav */}
     //   <header className='sticky top-0 z-20 border-b border-zinc-800/60 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/60'>
