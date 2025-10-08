@@ -6,7 +6,16 @@ import React from 'react';
 
 export default function HomePage() {
   return (
-    <div className='bg-orange-400 text-5xl text-black'>Hello world!</div>
+    <div className='bg-orange-400 text-5xl text-black'>
+      Hello world! TTTTEEEST
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus expedita facere alias
+        exercitationem ea laborum illum vel culpa. Vel officia, voluptates perferendis optio
+        mollitia quisquam culpa architecto iusto nihil voluptatibus eos consequatur, expedita
+        obcaecati fugit, adipisci ea minima at. Esse adipisci autem debitis eos odio nihil unde quas
+        aliquid! Cum!
+      </p>
+    </div>
     // <div className='min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black text-zinc-100'>
     //   {/* Nav */}
     //   <header className='sticky top-0 z-20 border-b border-zinc-800/60 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/60'>
