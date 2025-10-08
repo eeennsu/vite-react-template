@@ -29,13 +29,13 @@ jobs:
           BRANCH_NAME=${{ github.ref_name }}
           if [ "$BRANCH_NAME" == "dev" ]; then
             echo "BUILD_ENV=development" >> $GITHUB_ENV
-            echo "NOTIFY_PREFIX=🚀 DEV" >> $GITHUB_ENV
+            echo "NOTIFY_PREFIX=DEV" >> $GITHUB_ENV
           elif [ "$BRANCH_NAME" == "beta" ]; then
             echo "BUILD_ENV=beta" >> $GITHUB_ENV
-            echo "NOTIFY_PREFIX=🧪 BETA" >> $GITHUB_ENV
+            echo "NOTIFY_PREFIX=BETA" >> $GITHUB_ENV
           elif [ "$BRANCH_NAME" == "main" ]; then
             echo "BUILD_ENV=production" >> $GITHUB_ENV
-            echo "NOTIFY_PREFIX=✅ PROD" >> $GITHUB_ENV
+            echo "NOTIFY_PREFIX=PROD" >> $GITHUB_ENV
           fi
 
       # === Kakao: START ===
@@ -58,7 +58,7 @@ jobs:
               --arg prefix "$NOTIFY_PREFIX" --arg repo "$GITHUB_REPOSITORY" \
               --arg branch "$GITHUB_REF_NAME" --arg commit "${GITHUB_SHA::7}" \
               --arg author "$COMMIT_AUTHOR" \
-              '{object_type:"text", text:($prefix + " 배포 시작" + "\n레포지토리: " + $repo + "\n브랜치: " + $branch + "\n커밋: " + $commit + "\n작성자: " + $author), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"자세히"}')
+              '{object_type:"text", text:($prefix + "🚀 배포 시작" + "\n레포지토리: " + $repo + "\n브랜치: " + $branch + "\n커밋: " + $commit + "\n작성자: " + $author), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"자세히"}')
 
           curl -s -X POST "https://kapi.kakao.com/v2/api/talk/memo/default/send" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
@@ -112,7 +112,7 @@ jobs:
               --arg repo "$GITHUB_REPOSITORY" --arg branch "$GITHUB_REF_NAME" \
               --arg commit "${GITHUB_SHA::7}" --arg author "$COMMIT_AUTHOR" \
               --arg img "$IMAGE" --arg run "$GITHUB_RUN_NUMBER" --arg dur "$DURATION" \
-              '{object_type:"text", text:($prefix + " 배포 성공" + "\n레포지토리: " + $repo + "\n브랜치: " + $branch + "\n커밋: " + $commit + "\n작성자: " + $author + "\n이미지: " + $img + "\nrun: " + $run + "\n⏱ 경과: " + $dur), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"로그 보기"}')
+              '{object_type:"text", text:($prefix + "✅  배포 성공" + "\n레포지토리: " + $repo + "\n브랜치: " + $branch + "\n커밋: " + $commit + "\n작성자: " + $author + "\n이미지: " + $img + "\nrun: " + $run + "\n⏱ 경과: " + $dur), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"로그 보기"}')
 
           curl -s -X POST "https://kapi.kakao.com/v2/api/talk/memo/default/send" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
@@ -139,7 +139,7 @@ jobs:
               --arg repo "$GITHUB_REPOSITORY" --arg branch "$GITHUB_REF_NAME" \
               --arg commit "${GITHUB_SHA::7}" --arg author "$COMMIT_AUTHOR" \
               --arg dur "$DURATION" \
-              '{object_type:"text", text:($prefix + " 배포 실패" + "\n레포지토리: " + $repo + "\n브랜치: " + $branch + "\n커밋: " + $commit + "\n작성자: " + $author + "\n⏱ 경과: " + $dur), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"에러 로그"}')
+              '{object_type:"text", text:($prefix + "❌ 배포 실패" + "\n레포지토리: " + $repo + "\n브랜치: " + $branch + "\n커밋: " + $commit + "\n작성자: " + $author + "\n⏱ 경과: " + $dur), link:{web_url:"https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"}, button_title:"에러 로그"}')
 
           curl -s -X POST "https://kapi.kakao.com/v2/api/talk/memo/default/send" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
