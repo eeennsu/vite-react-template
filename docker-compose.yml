@@ -4,8 +4,8 @@ services:
     container_name: vite-react-template-web
     ports:
       - '7173:7173'
-    volumes:
-      - .:/app
+    # volumes:
+    #   - .:/app
     restart: 'always'
     # stdin_open: true
     # env_file:
