@@ -6,7 +6,7 @@ import React from 'react';
 
 export default function HomePage() {
   return (
-    <div className='bg-green-500 text-7xl text-amber-200'>EUNSU POWER V5</div>
+    <div className='text-pink-600-200 bg-purple-500 text-7xl'>EUNSU POWER GOOD</div>
     // <div className='min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black text-zinc-100'>
     //   {/* Nav */}
     //   <header className='sticky top-0 z-20 border-b border-zinc-800/60 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/60'>
