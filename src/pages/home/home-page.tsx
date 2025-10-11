@@ -6,9 +6,7 @@ import React from 'react';
 
 export default function HomePage() {
   return (
-    <div className='text-pink-600-200 bg-purple-500 text-7xl'>
-      UPDATE ECR DEV IMAGE TAG HELLO WORLD!!!!!
-    </div>
+    <div className='text-pink-600-200 bg-purple-500 text-7xl'>WOW</div>
     // <div className='min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black text-zinc-100'>
     //   {/* Nav */}
     //   <header className='sticky top-0 z-20 border-b border-zinc-800/60 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/60'>
