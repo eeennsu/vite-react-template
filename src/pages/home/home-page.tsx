@@ -7,7 +7,7 @@ import React from 'react';
 export default function HomePage() {
   return (
     <div className='text-pink-600-200 bg-purple-500 text-7xl'>
-      UPDATE ECR DEV IMAGE TAG
+      UPDATE ECR DEV IMAGE TAG HELLO WORLD!!!!!
     </div>
     // <div className='min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black text-zinc-100'>
     //   {/* Nav */}
