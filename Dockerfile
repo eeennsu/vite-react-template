@@ -13,6 +13,6 @@ COPY . .
 
 RUN pnpm build 
 
-EXPOSE 7173
+EXPOSE 5173
 
 CMD ["pnpm", "preview", "--host"]
